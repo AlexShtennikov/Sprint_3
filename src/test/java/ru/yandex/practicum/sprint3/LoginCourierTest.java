@@ -1,28 +1,31 @@
 package ru.yandex.practicum.sprint3;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class LoginCourierTest {
+import java.util.ArrayList;
 
+import static org.junit.Assert.assertTrue;
+
+public class LoginCourierTest {
     private LoginCourierApiClient loginClient;
     private CourierApiClient client;
+    private String login;
+    private String password;
+    private String firstName;
 
     @Before
     public void setUp() {
         loginClient = new LoginCourierApiClient();
         client = new CourierApiClient();
+        login = client.createLogin();
+        password = client.createPassword();
+        firstName = client.createFirstName();
     }
 
     @Test
     public void validLoginRequestShouldReturnId() {
-
-        String login = client.createLogin();
-        String password = client.createPassword();
-        String firstName = client.createFirstName();
-
         final Courier courier = new Courier(login, password, firstName);
 
         //Создаем курьера
@@ -38,20 +41,15 @@ public class LoginCourierTest {
                 .statusCode(200)
                 .extract().body().path("id");
 
-        Assert.assertNotNull(id);
+        //Убедимся, что у нас вернулось число и оно больше нуля
+        assertTrue(id > 0);
 
         loginCourier.deleteCourierWithId(login, password);
-
     }
 
 
     @Test
     public void validLoginRequestWithoutLoginShouldReturnError() {
-
-        String login = client.createLogin();
-        String password = client.createPassword();
-        String firstName = client.createFirstName();
-
         final Courier courier = new Courier(login, password, firstName);
 
         //Создаем курьера
@@ -71,16 +69,10 @@ public class LoginCourierTest {
         Assert.assertEquals(actual, expected);
 
         loginCourier.deleteCourierWithId(login, password);
-
     }
 
     @Test
     public void validLoginRequestWithoutPasswordShouldReturnError() {
-
-        String login = client.createLogin();
-        String password = client.createPassword();
-        String firstName = client.createFirstName();
-
         final Courier courier = new Courier(login, password, firstName);
 
         //Создаем курьера
@@ -107,15 +99,10 @@ public class LoginCourierTest {
         //Assert.assertEquals(actual, expected);
 
         loginCourier.deleteCourierWithId(login, password);
-
     }
 
     @Test
     public void validLoginRequestWithNotExistingLoginAndPasswordShouldReturnError() {
-
-        String login = client.createLogin();
-        String password = client.createPassword();
-
         final LoginCourier loginCourier = new LoginCourier(login, password);
 
         String actual = loginClient.loginCourier(loginCourier)
@@ -125,8 +112,5 @@ public class LoginCourierTest {
 
         String expected = "Учетная запись не найдена";
         Assert.assertEquals(actual, expected);
-
     }
-
-
 }

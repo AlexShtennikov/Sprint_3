@@ -6,14 +6,11 @@ import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import org.junit.Test;
-
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
-
 public class OrdersTest {
-
     OrderApiClient apiOrder = new OrderApiClient();
     private final String[] order1 = new String[]{"BLACK"};
     private final String[] order2 = new String[]{"GRAY"};
@@ -46,14 +43,11 @@ public class OrdersTest {
 
     //Проверим, что у нас список
     assertTrue(orderList.getOrders().getClass() == ArrayList.class);
-
     //Проверим, что список не пустой
     assertTrue(orderList.getOrders().size() > 0);
 
     //Отменим созданные заказы
     orderTest1.cancelOrderWithTrack(track1);
     orderTest2.cancelOrderWithTrack(track2);
-
     }
-
 }

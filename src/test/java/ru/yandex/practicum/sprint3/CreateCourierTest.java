@@ -1,33 +1,26 @@
 package ru.yandex.practicum.sprint3;
 
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.*;
 
 
-public class CreateСourierTest {
-    
+public class CreateCourierTest {
     private CourierApiClient client;
-    private LoginCourierApiClient loginClient;
-
     private LoginCourier loginCourier;
-
+    private String login;
+    private String password;
+    private String firstName;
 
     @Before
     public void setUp() {
         client = new CourierApiClient();
-        loginClient = new LoginCourierApiClient();
         loginCourier = new LoginCourier();
+        login = client.createLogin();
+        password = client.createPassword();
+        firstName = client.createFirstName();
     }
 
     @Test
     public void validCreateRequestShouldReturnStatusOkAndCorrectMessage() {
-
-        String login = client.createLogin();
-        String password = client.createPassword();
-        String firstName = client.createFirstName();
-
         final Courier courier = new Courier(login, password, firstName);
 
         boolean result = client.createCourier(courier)
@@ -38,15 +31,10 @@ public class CreateСourierTest {
         Assert.assertTrue(result);
 
         loginCourier.deleteCourierWithId(login, password);
-
     }
 
     @Test
     public void validCreateWithExistingCourierShouldReturnError() {
-
-        String login = client.createLogin();
-        String password = client.createPassword();
-        String firstName = client.createFirstName();
 
         final Courier courier = new Courier(login, password, firstName);
 
@@ -66,15 +54,11 @@ public class CreateСourierTest {
         Assert.assertEquals(actual, expected);
 
         loginCourier.deleteCourierWithId(login, password);
-
     }
 
 
     @Test
     public void createCourierWithoutRequiredFieldLoginShouldReturnError() {
-
-        String password = client.createPassword();
-        String firstName = client.createFirstName();
 
         final Courier courier = new Courier(null, password, firstName);
 
@@ -85,14 +69,10 @@ public class CreateСourierTest {
 
         String expected = "Недостаточно данных для создания учетной записи";
         Assert.assertEquals(actual, expected);
-
     }
 
     @Test
     public void createCourierWithoutRequiredFieldPasswordShouldReturnError() {
-
-        String login = client.createLogin();
-        String firstName = client.createFirstName();
 
         final Courier courier = new Courier(login, null, firstName);
 
@@ -103,6 +83,5 @@ public class CreateСourierTest {
 
         String expected = "Недостаточно данных для создания учетной записи";
         Assert.assertEquals(actual, expected);
-
     }
 }

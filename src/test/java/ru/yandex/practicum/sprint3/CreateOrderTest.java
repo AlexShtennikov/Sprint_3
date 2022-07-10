@@ -8,13 +8,10 @@ import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
 public class CreateOrderTest {
-
         private String[] colors = new String[1];
-
         public CreateOrderTest(String[] colors) {
             this.colors = colors;
         }
-
         @Parameterized.Parameters
         public static Object[][] sendOrderData() {
 
@@ -34,13 +31,9 @@ public class CreateOrderTest {
                     .then()
                     .statusCode(201)
                     .extract().body().path("track");
-            //Проверим, что пришло не пустое значение
-            assertNotNull(actualResult);
             //Проверим, что у нас число и оно больше нуля
             assertTrue(actualResult > 0);
 
             orderTest.cancelOrderWithTrack(actualResult);
-
         }
-
 }
